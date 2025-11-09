@@ -66,7 +66,7 @@ async function initCamera(){
 
         await new Promise((resolve, reject) => {
             videoFeed.onloadedmetadata = () => {
-                videoFeed.onplay().then(resolve).catch(reject);
+                videoFeed.play().then(resolve).catch(reject);
             };
             videoFeed.onerror = reject;
         });
