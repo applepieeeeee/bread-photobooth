@@ -20,6 +20,7 @@ const $ = (selector) => document.getElementById(selector);
 
 const startButton = $('startButton');
 const captureButton = $('captureButton');
+const restartButton = $('restartButton');
 const videoFeed = $('videoFeed');
 
 const countdownOverlay = $('countdownOverlay');
