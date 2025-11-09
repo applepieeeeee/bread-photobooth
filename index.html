@@ -11,22 +11,28 @@
             <p> yummiest photobooth ever !! </p>
         </header>
         
+        <!-- start page -->
         <div id="view-start" class="view" style="display:block;">
-            <h2> welcome <3 </h2>
-                <button id = "startButton"> start </button>
-        </div> 
+            <h2> start photobooth</h2>
+            <button id="startButton">
+                start
+            </button>
+        </div>
+
+        <!-- photobooth capture pg -->
         <div id="view-capture" class="view" style="display: none;">
             <h2> say cheese !</h2>
 
             <div id="videoContainer">
                 <video id="videoFeed" autoplay playstinline></video>
-                <div id="countdown">
+                
+                <div id="countdownOverlay" style="position: absolute; background: rgba(0,0,0,0.6); color: white; display:none; align-items: center; justify-content: center;">
+                    <span id="countdownText" style="font-size: 50px;">3</span>
+                </div>
 
-                </div>
-                <div id="pictureStatus">
-                    Picture 0 of 3
-                </div>
+                <div id="pictureStatus" style="position:absolute; background: #fcc783; padding:5px"></div>
             </div>
+
             <button id="captureButton">capture</button>
             <p id="captureMessage"> get ready !!</p>
         </div>
