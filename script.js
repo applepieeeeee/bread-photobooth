@@ -14,6 +14,7 @@ const STATE = {
 }
 
 const CANVAS_SIZE = { width: 620, height: 460 };
+const MAX_CAPTURES = 3;
 
 
 // elements
@@ -22,15 +23,34 @@ const $ = (selector) => document.getElementById(selector);
 const startButton = $('startButton');
 const captureButton = $('captureButton');
 const videoFeed = $('videoFeed');
+
 const countdownOverlay = $('countdownOverlay');
+const countdownText = $('countdownText');
+
 const cameraError = $('cameraError');
 const cameraErrorMessage = $('cameraErrorMessage');
+
+const pictureStatus = $('pictureStatus');
+const photostrip = $('photostrip');
+
+const captureMessage = $('captureMessage');
 
 // for capturing. 
 const tempCanvas = $('tempCanvas');
 const tempC = tempCanvas.getContext('2d');
 
+tempCanvas.width = CANVAS_SIZE.width;
+tempCanvas.height = CANVAS_SIZE.height;
+
+
 // functions
+
+function showMessage(msg){
+    captureMessage.textContent = msg;
+    setTimeout(() =>{
+        captureMessage.textContent = ''; 
+    }, 3000);
+}
 
 function switchToView(viewName){
     Object.values(VIEWS).forEach(id =>{
@@ -51,19 +71,19 @@ function switchToView(viewName){
 
 async function initCamera(){
     captureButton.disabled = true;
+    cameraError.style.display = 'none';
 
     try{
         // get camera stream
         const stream = await navigator.mediaDevices.getUserMedia({
-            facingMode: 'user',
-            width: CANVAS_SIZE.width,
-            height: CANVAS_SIZE.height
+            video: {
+                facingMode: 'user',
+            },
+            audio: false
         });
 
         STATE.videoStream = stream;
         videoFeed.srcObject = stream;
-        videoFeed.style.width = CANVAS_SIZE.width + 'px';
-        videoFeed.style.height = CANVAS_SIZE.height + 'px';
 
         await new Promise((resolve, reject) => {
             videoFeed.onloadedmetadata = () => {
@@ -74,6 +94,8 @@ async function initCamera(){
 
         captureButton.disabled = false;
         pictureStatus.textContent = 'Picture 0 of 3';
+        showMessage('camera initialized!');
+
     } catch (e){
         console.error("Error accessing camera: ", e);
 
@@ -81,14 +103,35 @@ async function initCamera(){
         cameraError.style.display = 'flex';
 
         captureButton.disabled = true;
+        showMessage('failed to access camera.');
+    }
+}
+
+function stopCamer(){
+    if (STATE.videoStream){
+        STATE.videoStream.getTracks().forEach(track => track.stop());
+        STATE.videoStream = null;
     }
 }
 
 function captureImage(){
-    tempCanvas.width = CANVAS_SIZE.width;
-    tempCanvas.height = CANVAS_SIZE.height;
-    tempC.drawImage(videoFeed, 0, 0, CANVAS_SIZE.width, CANVAS_SIZE.height);
+    tempC.save();
+    tempC.scale(-1,1);
+    tempC.drawImage(videoFeed, -CANVAS_SIZE.width, 0, CANVAS_SIZE.width, CANVAS_SIZE.height);
+    tempC.restore();
+
     return tempCanvas.toDataURL('image/png', 0.9);
+}
+
+function displayResults(){
+    photostrip.innerHTML = '';
+    STATE.capturedImages.forEach((imgDataUrl) =>{
+        const img = document.createElement('img');
+        img.src = imgDataUrl.originalDataURL;
+        img.className = 'captured-image';
+        photostrip.appendChild(img);
+    });
+    switchToView(VIEWS.RESULTS);
 }
 
 function startCaptureSequence(){
@@ -122,22 +165,23 @@ function startCaptureSequence(){
             clearInterval(interval);
 
             if(currentCount >= 3){
+
                 setTimeout(() => {
                     countdownOverlay.style.display = 'none';
                     STATE.isCapturing = false;
 
-                    if(STATE.videoStream){
-                        STATE.videoStream.getTracks().forEach(track => track.stop());
-                        STATE.videoStream = null;
-                    }
-                    
-                    alert('done capturing! get ready to customize your photos');
+                    stopCamera();
+                    console.log('done!');
+                    showMessage('all photos taken!');
+                    displayResults();
+
                 }, 500);
             } else {
                 setTimeout(() => {
                     countdownOverlay.style.display = 'none';
                     captureButton.disabled = false;
                     STATE.isCapturing = false;
+                    showMessage('ready for next photo!');
                 }, 1000);
             }
         }
@@ -151,6 +195,12 @@ startButton.addEventListener('click', async() => {
 });
 
 captureButton.addEventListener('click', startCaptureSequence);
+
+restartButton.addEventListener('click', () => {
+    STATE.capturedImages = [];
+    pictureStatus.textContent = `Picture 0 of ${MAX_CAPTURES}`;
+    switchToView(VIEWS.START);
+})
 
 window.onload = () => {
     switchToView(VIEWS.START);
