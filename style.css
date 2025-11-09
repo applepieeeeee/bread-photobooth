@@ -12,8 +12,17 @@ body{
     margin: 0 auto;
 }
 
+#header-image{
+    max-width: 90%;
+    height: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 view{
     min-height: 400px;
+    padding: 20px;
+    margin-top: 10px;
 }
 
 /* view states */
