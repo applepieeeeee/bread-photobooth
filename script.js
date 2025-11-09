@@ -106,7 +106,7 @@ async function initCamera(){
     }
 }
 
-function stopCamer(){
+function stopCamera(){
     if (STATE.videoStream){
         STATE.videoStream.getTracks().forEach(track => track.stop());
         STATE.videoStream = null;
