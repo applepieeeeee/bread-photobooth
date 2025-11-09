@@ -1,6 +1,4 @@
 // variables 
-const { StrictMode } = require("react");
-
 const VIEWS = {
     START: 'view-start',
     CAPTURE: 'view-capture',
