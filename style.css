@@ -19,6 +19,19 @@ body{
     margin-bottom: 20px;
 }
 
+#starSticker{
+    position: absolute;
+    margin-top: -10px;
+    margin-bottom: 150px;
+    bottom: 1px;
+    left: 80px;
+    width: 200px;
+
+    height: auto;
+    z-index: 20;
+    transform: rotate(-20deg);
+}
+
 view{
     min-height: 400px;
     padding: 20px;
