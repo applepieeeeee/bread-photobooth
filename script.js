@@ -3,11 +3,12 @@ const { StrictMode } = require("react");
 
 const VIEWS = {
     START: 'view-start',
-    CAPTURE: 'view-capture'
+    CAPTURE: 'view-capture',
+    RESULTS: 'view-results'
 }
 
 const STATE = {
-    captured: [],
+    capturedImages: [],
     videoStream: null,
     isCapturing: false
 }
