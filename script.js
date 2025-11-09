@@ -52,8 +52,33 @@ async function initCamera(){
 
     try{
         // get camera stream
+        const stream = await navigator.mediaDevices.getUserMedia({
+            facingMode: 'user',
+            width: CANVAS_SIZE.width,
+            height: CANVAS_SIZE.height
+        });
+
+        STATE.videoStream = stream;
+        videoFeed.srcObject = stream;
+        videoFeed.style.width = CANVAS_SIZE.width + 'px';
+        videoFeed.style.height = CANVAS_SIZE.height + 'px';
+
+        await new Promise((resolve, reject) => {
+            videoFeed.onloadedmetadata = () => {
+                videoFeed.onplay().then(resolve).catch(reject);
+            };
+            videoFeed.onerror = reject;
+        });
+
+        captureButton.disabled = false;
+        pictureStatus.textContent = 'Picture 0 of 3';
     } catch (e){
         console.error("Error accessing camera: ", e);
+
+        cameraErrorMessage.textContent = `Error: ${e.name || 'Unknown'}. Please update your camera permissions and reload.`;
+        cameraError.style.display = 'flex';
+
+        captureButton.disabled = true;
     }
 }
 
