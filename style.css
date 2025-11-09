@@ -32,6 +32,19 @@ body{
     transform: rotate(-20deg);
 }
 
+#confetti1{
+    position: absolute;
+    margin-top: -700px;
+    margin-bottom: 400px;
+    left: 1600px;
+
+    width: 210px;
+
+    height: auto;
+    z-index: 20;
+    transform: rotate(20deg);
+}
+
 view{
     min-height: 400px;
     padding: 20px;
