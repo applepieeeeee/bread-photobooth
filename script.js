@@ -38,6 +38,7 @@ function switchToView(viewName){
             view.style.display = 'none';
         }
     });
+
     const target = $(viewName);
     if (target){
         target.style.display = 'flex';
@@ -88,3 +89,68 @@ function captureImage(){
     tempC.drawImage(videoFeed, 0, 0, CANVAS_SIZE.width, CANVAS_SIZE.height);
     return tempCanvas.toDataURL('image/png', 0.9);
 }
+
+function startCaptureSequence(){
+    if (STATE.isCapturing || STATE.capturedImages.length >= 3){
+        return;
+    }
+
+/*
+        countdown + capture logics
+*/
+    STATE.isCapturing = true;
+    captureButton.disabled = true;
+
+    countdownOverlay.style.display = 'flex';
+
+    let count = 3;
+    countdownText.textContent = count;
+
+    const interval = setInterval(() => {
+        if(count > 0){
+            countdownText.textContent = count;
+        } else if (count === 0){
+            countdownText.textContent = 'cheese!';
+
+            const dataURL = captureImage();
+            STATE.capturedImages.push( { originalDataURL: dataURL });
+
+            const currentCount = STATE.capturedImages.length;
+            pictureStatus.textContent = `Picture ${currentCount} of 3`;
+
+            clearInterval(interval);
+
+            if(currentCount >= 3){
+                setTimeout(() => {
+                    countdownOverlay.style.display = 'none';
+                    STATE.isCapturing = false;
+
+                    if(STATE.videoStream){
+                        STATE.videoStream.getTracks().forEach(track => track.stop());
+                        STATE.videoStream = null;
+                    }
+                    
+                    alert('done capturing! get ready to customize your photos');
+                }, 500);
+            } else {
+                setTimeout(() => {
+                    countdownOverlay.style.display = 'none';
+                    captureButton.disabled = false;
+                    STATE.isCapturing = false;
+                }, 1000);
+            }
+        }
+    }, 1000);
+}
+
+startButton.addEventListener('click', async() => {
+    STATE.capturedImages = []; // reset 
+    switchToView(VIEWS.CAPTURE);
+    await initCamera();
+});
+
+captureButton.addEventListener('click', startCaptureSequence);
+
+window.onload = () => {
+    switchToView(VIEWS.START);
+};
