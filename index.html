@@ -31,10 +31,15 @@
                 </div>
 
                 <div id="pictureStatus" style="position:absolute; background: #fcc783; padding:5px"></div>
+
+                <div id="cameraError" style="position:absolute; inset: 0; background: red; color: white; display: none">
+                    <p> camera error! please check your permissions.</p>
+                    <p id="cameraErrorMessage">waiting...</p>
+                </div>
             </div>
 
-            <button id="captureButton">capture</button>
-            <p id="captureMessage"> get ready !!</p>
+            <button id="captureButton" disabled>capture</button>
+            <p id="captureMessage"></p>
         </div>
     </div>
 </body>
