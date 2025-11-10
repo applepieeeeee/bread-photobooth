@@ -36,13 +36,26 @@ body{
     position: absolute;
     margin-top: -700px;
     margin-bottom: 400px;
-    left: 1600px;
 
+    left: 1600px;
     width: 210px;
 
     height: auto;
     z-index: 20;
     transform: rotate(20deg);
+}
+
+#confetti2{
+    position: absolute;
+    margin-top: -200px;
+    margin-bottom: 100px;
+
+    left: 20px;
+    width: 210px;
+
+    height: auto;
+    z-index: 20;
+    transform: rotate(5deg);
 }
 
 view{
@@ -53,6 +66,7 @@ view{
 
 /* view states */
 #view-start, #view-capture, #view-results{
+    color: white;
     font-family: Roboto-Mono, monospace, sans-serif;
     display: none;
 
@@ -133,6 +147,7 @@ view{
 }
 
 button{
+    color: white;
     font-family: Roboto-Mono, monospace, sans-serif;
     font-weight: bold;
     text-transform: uppercase;
