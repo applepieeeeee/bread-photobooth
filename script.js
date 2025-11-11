@@ -106,7 +106,7 @@ async function initCamera(){
         });
 
         captureButton.disabled = false;
-        pictureStatus.textContent = 'Picture ${STATE.capturedImages.length} of 3';
+        pictureStatus.textContent = `Picture ${STATE.capturedImages.length} of 3`;
         showMessage('camera initialized!');
 
     } catch (e){
@@ -119,7 +119,7 @@ async function initCamera(){
             cameraError.style.display = 'flex';
         }
 
-        setCaptureButtonDisabled(true);
+        setCaptureBtnToDisabled(true);
         showMessage('failed to access camera.');
     }
 }
@@ -167,7 +167,7 @@ function startCaptureSequence(){
         countdown + capture logics
 */
     STATE.isCapturing = true;
-    setCaptureButtonDisabled(true);
+    setCaptureBtnToDisabled(true);
 
     countdownOverlay.style.display = 'flex';
 
