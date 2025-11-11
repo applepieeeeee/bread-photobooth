@@ -106,16 +106,20 @@ async function initCamera(){
         });
 
         captureButton.disabled = false;
-        pictureStatus.textContent = 'Picture 0 of 3';
+        pictureStatus.textContent = 'Picture ${STATE.capturedImages.length} of 3';
         showMessage('camera initialized!');
 
     } catch (e){
         console.error("Error accessing camera: ", e);
 
-        cameraErrorMessage.textContent = `Error: ${e.name || 'Unknown'}. Please update your camera permissions and reload.`;
-        cameraError.style.display = 'flex';
+        if (cameraErrorMessage){
+            cameraErrorMessage.textContent = `Error: ${e.name || 'Unknown'}. Please update your permissions and reload.`;
+        }
+        if (cameraError){
+            cameraError.style.display = 'flex';
+        }
 
-        captureButton.disabled = true;
+        setCaptureButtonDisabled(true);
         showMessage('failed to access camera.');
     }
 }
@@ -128,6 +132,8 @@ function stopCamera(){
 }
 
 function captureImage(){
+    if (!tempC || !videoFeed) return;
+
     tempC.save();
     tempC.scale(-1,1);
     tempC.drawImage(videoFeed, -CANVAS_SIZE.width, 0, CANVAS_SIZE.width, CANVAS_SIZE.height);
@@ -137,13 +143,18 @@ function captureImage(){
 }
 
 function displayResults(){
+    if (!photostrip) return;
+
     photostrip.innerHTML = '';
+
     STATE.capturedImages.forEach((imgDataUrl) =>{
         const img = document.createElement('img');
         img.src = imgDataUrl.originalDataURL;
         img.className = 'captured-image';
         photostrip.appendChild(img);
     });
+
+    stopCamera();
     switchToView(VIEWS.RESULTS);
 }
 
@@ -156,7 +167,7 @@ function startCaptureSequence(){
         countdown + capture logics
 */
     STATE.isCapturing = true;
-    captureButton.disabled = true;
+    setCaptureButtonDisabled(true);
 
     countdownOverlay.style.display = 'flex';
 
@@ -164,6 +175,8 @@ function startCaptureSequence(){
     countdownText.textContent = count;
 
     const interval = setInterval(() => {
+        count--;
+
         if(count > 0){
             countdownText.textContent = count;
         } else if (count === 0){
@@ -182,12 +195,8 @@ function startCaptureSequence(){
                 setTimeout(() => {
                     countdownOverlay.style.display = 'none';
                     STATE.isCapturing = false;
-
-                    stopCamera();
-                    console.log('done!');
                     showMessage('all photos taken!');
                     displayResults();
-
                 }, 500);
             } else {
                 setTimeout(() => {
@@ -201,19 +210,25 @@ function startCaptureSequence(){
     }, 1000);
 }
 
-startButton.addEventListener('click', async() => {
-    STATE.capturedImages = []; // reset 
-    switchToView(VIEWS.CAPTURE);
-    await initCamera();
-});
+if (startButton){
+    startButton.addEventListener('click', async() => {
+        STATE.capturedImages = []; // reset 
+        switchToView(VIEWS.CAPTURE);
+        await initCamera();
+    });
+}
 
-captureButton.addEventListener('click', startCaptureSequence);
+if (captureButton){
+    captureButton.addEventListener('click', startCaptureSequence);
+}
 
-restartButton.addEventListener('click', () => {
-    STATE.capturedImages = [];
-    pictureStatus.textContent = `Picture 0 of ${MAX_CAPTURES}`;
-    switchToView(VIEWS.START);
-})
+if (restartButton){
+    restartButton.addEventListener('click', () => {
+        STATE.capturedImages = [];
+        pictureStatus.textContent = `Picture 0 of ${MAX_CAPTURES}`;
+        switchToView(VIEWS.START);
+    })
+}
 
 window.onload = () => {
     switchToView(VIEWS.START);
