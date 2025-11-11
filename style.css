@@ -5,11 +5,15 @@ body{
     margin: 0;
     padding: 20px;
     text-align: center;
+    background-color: #ffffff;
 }
 
 #app{
     max-width: 700px;
     margin: 0 auto;
+    border: 1px solid #d6d4d2;
+    padding: 20px;
+    border-radius: 8px;
 }
 
 #header-image{
@@ -139,6 +143,15 @@ view{
     z-index: 12;
 }
 
+.photostrip{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+}
+
 .captured-image{
     width: 100%;
     height: auto;
@@ -162,9 +175,29 @@ button{
 
     border: none;
     border-radius: 5px;
+    transition: width 0.3s ease-in-out; height 0.3s ease-in-out;
 }
 
-button:disabled{
-    background-color: #d6cdc2;
+button:hover{
+    width: 110%;
+}
+
+#captureButton{
+    width: 100px;
+    height: auto;
+
+    cursor: pointer;
+    margin: 10px;
+
+    transition: opacity 0.3s;
+    opacity: 1.0;
+}
+
+#captureButton[style*="pointer-events: none"]{
+    opacity: 0.8;
     cursor: not-allowed;
+}
+
+#captureButton:not([style*="pointer-events: none"]):hover{
+    opacity: 0.8;
 }
