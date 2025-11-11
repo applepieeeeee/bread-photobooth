@@ -16,7 +16,7 @@
         
         <!-- start page -->
         <div id="view-start" class="view" style="display:block;">
-            <!-- <h2> start photobooth</h2> -->
+            <h2> start photobooth</h2>
             <button id="startButton">
                 start
             </button>
@@ -29,11 +29,11 @@
             <div id="videoContainer">
                 <video id="videoFeed" autoplay playstinline></video>
                 
-                <div id="countdownOverlay" style="position: absolute; background: rgba(0,0,0,0.6); color: white; display:none; align-items: center; justify-content: center;">
-                    <span id="countdownText" style="font-size: 50px;">3</span>
+                <div id="countdownOverlay">
+                    <span id="countdownText">3</span>
                 </div>
 
-                <div id="pictureStatus" style="position:absolute; background: #fcc783; padding:5px"></div>
+                <div id="pictureStatus"></div>
 
                 <div id="cameraError" style="position:absolute; inset: 0; background: red; color: white; display: none">
                     <p> camera error! please check your permissions.</p>
@@ -53,7 +53,6 @@
         <div id="view-results" class="view" style="display: none;">
             <h2> your photos!</h2>
             <div id="photostrip">
-
             </div>
             <button id="restartButton"> take more photos! ~ </button>
         </div>

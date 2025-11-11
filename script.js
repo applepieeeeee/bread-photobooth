@@ -38,13 +38,27 @@ const captureMessage = $('captureMessage');
 const tempCanvas = $('tempCanvas');
 const tempC = tempCanvas.getContext('2d');
 
-tempCanvas.width = CANVAS_SIZE.width;
-tempCanvas.height = CANVAS_SIZE.height;
-
+if (tempCanvas){
+    tempCanvas.width = CANVAS_SIZE.width;
+    tempCanvas.height = CANVAS_SIZE.height;
+}
 
 // functions
 
+function setCaptureBtnToDisabled(isDisabled){
+    captureButton.disabled = isDisabled;
+
+    if(isDisabled){
+        captureButton.style.pointerEvents = 'none';
+        captureButton.style.opacity = '0.5';
+    }{
+        captureButton.style.pointerEvents = 'auto';
+        captureButton.style.opacity = '1.0';
+    }
+}
 function showMessage(msg){
+    if (!captureMessage) return;
+
     captureMessage.textContent = msg;
     setTimeout(() =>{
         captureMessage.textContent = ''; 
