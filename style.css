@@ -61,11 +61,11 @@ body{
     transform: rotate(5deg);
 }
 
-view{
+.view{
     min-height: 400px;
-    padding: 20px;
-    margin-top: 10px;
 }
+
+
 
 /* view states */
 #view-start, #view-capture, #view-results{
@@ -142,7 +142,7 @@ view{
     z-index: 12;
 }
 
-.photostrip{
+#photostrip{
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -173,6 +173,10 @@ button{
     border: none;
     border-radius: 20px;
     transition: width 0.3s ease-in-out height 0.3s ease-in-out;
+}
+
+button:hover{
+    background-color: #b69e87;
 }
 
 #captureButton{

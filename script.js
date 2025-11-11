@@ -106,7 +106,7 @@ async function initCamera(){
         });
 
         captureButton.disabled = false;
-        pictureStatus.textContent = `Picture ${STATE.capturedImages.length} of 3`;
+        pictureStatus.textContent = `Picture ${STATE.capturedImages.length + 1} of 3`;
         showMessage('camera initialized!');
 
     } catch (e){
