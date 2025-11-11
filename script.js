@@ -51,7 +51,7 @@ function setCaptureBtnToDisabled(isDisabled){
     if(isDisabled){
         captureButton.style.pointerEvents = 'none';
         captureButton.style.opacity = '0.5';
-    }{
+    } else{
         captureButton.style.pointerEvents = 'auto';
         captureButton.style.opacity = '1.0';
     }
@@ -83,7 +83,7 @@ function switchToView(viewName){
 }
 
 async function initCamera(){
-    captureButton.disabled = true;
+    setCaptureBtnToDisabled(true);
     cameraError.style.display = 'none';
 
     try{
@@ -105,7 +105,7 @@ async function initCamera(){
             videoFeed.onerror = reject;
         });
 
-        captureButton.disabled = false;
+        setCaptureBtnToDisabled(false);
         pictureStatus.textContent = `Picture ${STATE.capturedImages.length + 1} of 3`;
         showMessage('camera initialized!');
 
@@ -209,6 +209,9 @@ function startCaptureSequence(){
         }
     }, 1000);
 }
+
+
+// event listeners
 
 if (startButton){
     startButton.addEventListener('click', async() => {
