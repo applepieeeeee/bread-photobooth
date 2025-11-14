@@ -24,8 +24,8 @@ body{
     position: absolute;
 
     bottom: 5vh;
-    left: 5vw;
-    width: 15%;
+    left: 6vw;
+    width: 10%;
 
     height: auto;
     z-index: 20;
@@ -37,7 +37,7 @@ body{
 
     top: 10vh;
     right: 5vw;
-    width: 18%;
+    width: 10%;
 
     height: auto;
     z-index: 20;
@@ -48,8 +48,8 @@ body{
     position: absolute;
 
     bottom: 60vh;
-    left: 1%;
-    width: 16%;
+    left: 3%;
+    width: 10%;
 
     height: auto;
     z-index: 20;
@@ -154,8 +154,12 @@ body{
 }
 
 #startButton{
+    position: absolute;
     width: 250px;
     height: auto;
+
+    top: 50%;
+
     cursor: pointer;
     margin: 100px;
     transition: opacity 0.3s;
@@ -174,11 +178,11 @@ body{
 
 #photostrip-sticker{
     position: absolute;
-    width: 300px;
+    width: 250px;
     height: auto;
 
-    top: 50%;
-    left: 30%;
+    top: 60%;
+    left: 20%;
     transform: translate(-100%, -50%);
 }
 
