@@ -198,10 +198,11 @@ function startCaptureSequence(){
                     showMessage('all photos taken!');
                     displayResults();
                 }, 500);
+
             } else {
                 setTimeout(() => {
                     countdownOverlay.style.display = 'none';
-                    captureButton.disabled = false;
+                    setCaptureBtnToDisabled(false);
                     STATE.isCapturing = false;
                     showMessage('ready for next photo!');
                 }, 1000);
