@@ -24,12 +24,10 @@ body{
 
 #starSticker{
     position: absolute;
-    margin-top: -200px;
-    margin-bottom: 300px;
-    
-    bottom: 1px;
-    left: 80px;
-    width: 200px;
+
+    bottom: 5vh;
+    left: 5vw;
+    width: 15%;
 
     height: auto;
     z-index: 20;
@@ -38,11 +36,10 @@ body{
 
 #confetti1{
     position: absolute;
-    margin-top: -100px;
-    margin-bottom: 400px;
 
-    left: 1300px;
-    width: 210px;
+    top: 10vh;
+    right: 5vw;
+    width: 18%;
 
     height: auto;
     z-index: 20;
@@ -51,11 +48,10 @@ body{
 
 #confetti2{
     position: absolute;
-    margin-top: -200px;
-    margin-bottom: 100px;
 
-    left: 400px;
-    width: 200px;
+    bottom: 60vh;
+    left: 1%;
+    width: 16%;
 
     height: auto;
     z-index: 20;
@@ -159,25 +155,12 @@ body{
     margin-bottom: 10px;
 }
 
-button{
-    color: white;
-    font-family: Roboto-Mono, monospace, sans-serif;
-    letter-spacing: 1px;
-
-    padding: 20px 20px;
-    margin: 100px;
+#startButton{
+    width: 200px;
+    height: auto;
     cursor: pointer;
-
-    font-size: 20px;
-    background-color: #d1bba6;
-
-    border: none;
-    border-radius: 20px;
-    transition: width 0.3s ease-in-out height 0.3s ease-in-out;
-}
-
-button:hover{
-    background-color: #b69e87;
+    margin: 100px;
+    transition: opacity 0.3s;
 }
 
 #captureButton{
