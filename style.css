@@ -24,8 +24,8 @@ body{
 
 #starSticker{
     position: absolute;
-    margin-top: -10px;
-    margin-bottom: 150px;
+    margin-top: -200px;
+    margin-bottom: 300px;
     bottom: 1px;
     left: 80px;
     width: 200px;
@@ -37,10 +37,10 @@ body{
 
 #confetti1{
     position: absolute;
-    margin-top: -700px;
+    margin-top: -100px;
     margin-bottom: 400px;
 
-    left: 1600px;
+    left: 1300px;
     width: 210px;
 
     height: auto;
@@ -53,12 +53,12 @@ body{
     margin-top: -200px;
     margin-bottom: 100px;
 
-    left: 1300px;
-    width: 100px;
+    left: 400px;
+    width: 200px;
 
     height: auto;
     z-index: 20;
-    transform: rotate(5deg);
+    transform: rotate(20deg);
 }
 
 .view{

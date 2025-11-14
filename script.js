@@ -83,7 +83,7 @@ function switchToView(viewName){
 }
 
 async function initCamera(){
-    setCaptureBtnToDisabled(true);
+    setCaptureBtnToDisabled(false);
     cameraError.style.display = 'none';
 
     try{
