@@ -1,3 +1,5 @@
+const { jsx } = require("react/jsx-runtime");
+
 // variables 
 const VIEWS = {
     START: 'view-start',
@@ -21,6 +23,8 @@ const $ = (selector) => document.getElementById(selector);
 const startButton = $('startButton');
 const captureButton = $('captureButton');
 const restartButton = $('restartButton');
+const downloadButton = $('downloadButton');
+
 const videoFeed = $('videoFeed');
 
 const countdownOverlay = $('countdownOverlay');
@@ -158,6 +162,48 @@ function displayResults(){
     switchToView(VIEWS.RESULTS);
 }
 
+function downloadPhotostrip(){
+    if (STATE.capturedImages.length !== MAX_CAPTURES){
+        showMessage("not enough photos :(");
+        return;
+    }
+
+    const STRIP_WIDTH = CANVAS_SIZE.width;
+    const STRIP_HEIGHT = CANVAS_SIZE.height * MAX_CAPTURES;
+
+    const stripCanvas = document.createElement('canvas');
+    stripCanvas.width = STRIP_WIDTH;
+    stripCanvas.height = STRIP_HEIGHT;
+    const stripC = stripCanvas.getContext('2d');
+
+    let imagesLoadedCount = 0;
+
+    STATE.capturedImages.forEach((imageObj, index) => {
+        const img = new Image();
+
+        img.onload = () =>{
+            stripC.save();
+            stripC.scale(-1,1);
+
+            stripC.drawImage(img, -STRIP_WIDTH, index * CANVAS_SIZE.height, STRIP_WIDTH, CANVAS_SIZE.height);
+            stripC.restore();
+
+            imagesLoadedCount++;
+
+            if (imagesLoadedCount === MAX_CAPTURES){
+                const link = document.createElement('a');
+                link.download = 'bread_photobooth_strip.png';
+                link.href = stripCanvas.toDataURL('image/png');
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+        }
+        img.src = imageObj.originalDataURL;
+    });
+}
+
 function startCaptureSequence(){
     if (STATE.isCapturing || STATE.capturedImages.length >= 3){
         return;
@@ -224,6 +270,10 @@ if (startButton){
 
 if (captureButton){
     captureButton.addEventListener('click', startCaptureSequence);
+}
+
+if (downloadButton){
+    downloadButton.addEventListener('click', downloadPhotostrip);
 }
 
 if (restartButton){
