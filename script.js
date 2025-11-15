@@ -68,61 +68,50 @@ function showMessage(msg, duration = 3000){
 }
 
 function switchToView(viewName){
-    Object.values(VIEWS).forEach(id =>{
-        const view = $(id);
-        if(view){
-            view.style.display = 'none';
-        }
+    const views = document.querySelectorAll('.view');
+    views.forEach(view => {
+        view.style.display = 'none';
     });
 
-    const target = $(viewName);
+    const target = document.getElementById(viewName);
     if (target){
-        target.style.display = 'flex';
-        target.style.flexDirection = 'column';
-        target.style.alignItems = 'center';
-        target.style.justifyContent = 'center';
+        target.style.display = 'flex'
+    }
+
+    if (viewId !== VIEWS.CAPTURE && STATE.videoStream){
+        STATE.videoStream.getTracks().forEach(track => track.stop());
+        STATE.videoStream = null;
+        if(videoFeed) videoFeed.srcObject = null;
     }
 }
 
 async function initCamera(){
-    setCaptureBtnToDisabled(false);
-    cameraError.style.display = 'none';
+    if (!videoFeed) return;
 
     try{
-        // get camera stream
+        if(cameraError) cameraError.style.display = 'none';
+        setCaptureBtnToDisabled(true);
+
         const stream = await navigator.mediaDevices.getUserMedia({
             video: {
-                facingMode: 'user',
-            },
-            audio: false
+                width: CANVAS_SIZE.width,
+                height: CANVAS_SIZE.height
+            }
         });
 
         STATE.videoStream = stream;
         videoFeed.srcObject = stream;
+        videoFeed.onplay();
 
-        await new Promise((resolve, reject) => {
-            videoFeed.onloadedmetadata = () => {
-                videoFeed.play().then(resolve).catch(reject);
-            };
-            videoFeed.onerror = reject;
-        });
-
-        setCaptureBtnToDisabled(false);
-        pictureStatus.textContent = `Picture ${STATE.capturedImages.length + 1} of 3`;
-        showMessage('camera initialized!');
-
-    } catch (e){
-        console.error("Error accessing camera: ", e);
-
-        if (cameraErrorMessage){
-            cameraErrorMessage.textContent = `Error: ${e.name || 'Unknown'}. Please update your permissions and reload.`;
-        }
-        if (cameraError){
-            cameraError.style.display = 'flex';
-        }
-
+        videoFeed.onloadedmetadata = () =>{
+            if (pictureStatus) pictureStatus.textContent = `Picture 0 of ${MAX_CAPTURES}`;
+            setCaptureBtnToDisabled(false);
+        };
+    } catch(err){
+        console.error("camera access denied or failed: ", err);
+        if (cameraErrorMessage) cameraErrorMessage.textContent = err.name || "Unknown Error";
+        if (cameraError) cameraError.style.display = 'flex';
         setCaptureBtnToDisabled(true);
-        showMessage('failed to access camera.');
     }
 }
 
@@ -145,19 +134,15 @@ function captureImage(){
 }
 
 function displayResults(){
-    if (!photostrip) return;
-
-    photostrip.innerHTML = '';
-
-    STATE.capturedImages.forEach((imgDataUrl) =>{
-        const img = document.createElement('img');
-        img.src = imgDataUrl.originalDataURL;
-        img.className = 'captured-image';
-        photostrip.appendChild(img);
-    });
-
-    stopCamera();
     switchToView(VIEWS.RESULTS);
+    if (photstrip) photostrip.innerHTML = '';
+
+    STATE.capturedImages.forEach(img => {
+        const imgElement = document.createElement('img');
+        imgElement.src = img.originalDataURL;
+        imgElement.className = 'captured-image';
+        if (photostrip) photostrip.appendChild(imgElement);
+    });
 }
 
 function downloadPhotostrip(){
