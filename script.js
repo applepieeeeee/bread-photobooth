@@ -80,7 +80,7 @@ function switchToView(viewName){
         target.style.display = 'flex'
     }
 
-    if (viewId !== VIEWS.CAPTURE && STATE.videoStream){
+    if (viewName !== VIEWS.CAPTURE && STATE.videoStream){
         STATE.videoStream.getTracks().forEach(track => track.stop());
         STATE.videoStream = null;
         if(videoFeed) videoFeed.srcObject = null;
@@ -103,7 +103,6 @@ async function initCamera(){
 
         STATE.videoStream = stream;
         videoFeed.srcObject = stream;
-        videoFeed.onplay();
 
         videoFeed.onloadedmetadata = () =>{
             if (pictureStatus) pictureStatus.textContent = `Picture 0 of ${MAX_CAPTURES}`;
@@ -137,7 +136,7 @@ function captureImage(){
 
 function displayResults(){
     switchToView(VIEWS.RESULTS);
-    if (photstrip) photostrip.innerHTML = '';
+    if (photostrip) photostrip.innerHTML = '';
 
     STATE.capturedImages.forEach(img => {
         const imgElement = document.createElement('img');
@@ -167,11 +166,13 @@ function downloadPhotostrip(){
         const img = new Image();
 
         img.onload = () =>{
-            stripC.save();
-            stripC.scale(-1,1);
-
-            stripC.drawImage(img, -STRIP_WIDTH, index * CANVAS_SIZE.height, STRIP_WIDTH, CANVAS_SIZE.height);
-            stripC.restore();
+            stripC.drawImage(
+                img,
+                0,
+                index * CANVAS_SIZE.height,
+                STRIP_WIDTH,
+                CANVAS_SIZE.height
+            );
 
             imagesLoadedCount++;
 
@@ -183,6 +184,8 @@ function downloadPhotostrip(){
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+
+                showMessage('download successful!');
             };
         }
         img.src = imageObj.originalDataURL;
@@ -218,7 +221,7 @@ function startCaptureSequence(){
             const dataURL = tempCanvas.toDataURL('image/png');
             STATE.capturedImages.push({originalDataURL: dataURL});
 
-            const currCount = STATE.capturedImages.length;
+            const currentCount = STATE.capturedImages.length;
             if(pictureStatus) pictureStatus.textContent = `Picture ${currentCount} of 3`;
 
             clearInterval(interval);
@@ -263,7 +266,7 @@ if (downloadButton){
 if (restartButton){
     restartButton.addEventListener('click', () => {
         STATE.capturedImages = [];
-        pictureStatus.textContent = `Picture 0 of ${MAX_CAPTURES}`;
+        if (pictureStatus) pictureStatus.textContent = `Picture 0 of ${MAX_CAPTURES}`;
         switchToView(VIEWS.START);
     })
 }
