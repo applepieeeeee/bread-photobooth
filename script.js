@@ -48,6 +48,8 @@ if (tempCanvas){
 // functions
 
 function setCaptureBtnToDisabled(isDisabled){
+    if (!captureButton) return;
+
     captureButton.disabled = isDisabled;
 
     if(isDisabled){
@@ -188,54 +190,53 @@ function downloadPhotostrip(){
 }
 
 function startCaptureSequence(){
-    if (STATE.isCapturing || STATE.capturedImages.length >= 3){
+    if (STATE.isCapturing || STATE.capturedImages.length >= 3 || !tempC){
         return;
     }
-
 /*
         countdown + capture logics
 */
     STATE.isCapturing = true;
     setCaptureBtnToDisabled(true);
-
-    countdownOverlay.style.display = 'flex';
+    if (countdownOverlay) countdownOverlay.style.display = 'flex';
+    if (countdownText) countdownText.textContent = '3';
 
     let count = 3;
-    countdownText.textContent = count;
-
     const interval = setInterval(() => {
         count--;
+        if (countdownText) countdownText.textContent = count;
 
-        if(count > 0){
-            countdownText.textContent = count;
-        } else if (count === 0){
-            countdownText.textContent = 'cheese!';
+        if (count === 0){
+            tempC.clearRect(0,0,CANVAS_SIZE.width, CANVAS_SIZE.height);
 
-            const dataURL = captureImage();
-            STATE.capturedImages.push( { originalDataURL: dataURL });
+            tempC.save();
+            tempC.translate(CANVAS_SIZE.width, 0);
+            tempC.scale(-1, 1);
+            tempC.drawImage(videoFeed,0,0,CANVAS_SIZE.width, CANVAS_SIZE.height);
+            tempC.restore();
 
-            const currentCount = STATE.capturedImages.length;
-            pictureStatus.textContent = `Picture ${currentCount} of 3`;
+            const dataURL = tempCanvas.toDataURL('image/png');
+            STATE.capturedImages.push({originalDataURL: dataURL});
+
+            const currCount = STATE.capturedImages.length;
+            if(pictureStatus) pictureStatus.textContent = `Picture ${currentCount} of 3`;
 
             clearInterval(interval);
 
             if(currentCount >= 3){
-
                 setTimeout(() => {
-                    countdownOverlay.style.display = 'none';
+                    if (countdownOverlay) countdownOverlay.style.display = 'none';
                     STATE.isCapturing = false;
                     showMessage('all photos taken!');
                     displayResults();
                 }, 500);
-
             } else {
                 setTimeout(() => {
-                    countdownOverlay.style.display = 'none';
+                    if (countdownOverlay) countdownOverlay.style.display = 'none';
                     setCaptureBtnToDisabled(false);
                     STATE.isCapturing = false;
                     showMessage('ready for next photo!');
-                }, 1000);
-            }
+            }, 1000);
         }
     }, 1000);
 }
