@@ -159,12 +159,12 @@ body{
 
 #startButton{
     position: absolute;
-    top: 50%;
-    bottom: 50%;
+    top: 70%;
+    left: 55%;
     transform: translate(-50%, -50%);
     z-index: 30;
 
-    width: clamp(150px, 70vw, 250px);
+    width: 250px;
     height: auto;
 
     cursor: pointer;
