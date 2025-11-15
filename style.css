@@ -57,6 +57,14 @@ body{
     transform: rotate(20deg);
 }
 
+#conf6{
+    position: absolute;
+    bottom: 30vh;
+    right: 9vh;
+
+    width: 10%;
+}
+
 .view{
     min-height: 80vh;
 }
