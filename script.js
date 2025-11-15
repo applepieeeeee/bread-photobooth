@@ -63,6 +63,7 @@ function setCaptureBtnToDisabled(isDisabled){
         captureButton.style.opacity = '1.0';
     }
 }
+
 function showMessage(msg, duration = 3000){
     if (captureMessage){
         captureMessage.textContent = msg;
@@ -90,6 +91,11 @@ function switchToView(viewName){
         STATE.videoStream = null;
         if(videoFeed) videoFeed.srcObject = null;
     }
+
+    if (viewName === VIEWS.START){
+        const startView = document.getElementById(VIEWS.START);
+        if (startView) startView.style.display = 'flex';
+    }
 }
 
 async function initCamera(){
@@ -113,30 +119,13 @@ async function initCamera(){
             if (pictureStatus) pictureStatus.textContent = `Picture 0 of ${MAX_CAPTURES}`;
             setCaptureBtnToDisabled(false);
         };
+
     } catch(err){
         console.error("camera access denied or failed: ", err);
         if (cameraErrorMessage) cameraErrorMessage.textContent = err.name || "Unknown Error";
         if (cameraError) cameraError.style.display = 'flex';
         setCaptureBtnToDisabled(true);
     }
-}
-
-function stopCamera(){
-    if (STATE.videoStream){
-        STATE.videoStream.getTracks().forEach(track => track.stop());
-        STATE.videoStream = null;
-    }
-}
-
-function captureImage(){
-    if (!tempC || !videoFeed) return;
-
-    tempC.save();
-    tempC.scale(-1,1);
-    tempC.drawImage(videoFeed, -CANVAS_SIZE.width, 0, CANVAS_SIZE.width, CANVAS_SIZE.height);
-    tempC.restore();
-
-    return tempCanvas.toDataURL('image/png', 0.9);
 }
 
 function displayResults(){
@@ -244,7 +233,8 @@ function startCaptureSequence(){
                     setCaptureBtnToDisabled(false);
                     STATE.isCapturing = false;
                     showMessage('ready for next photo!');
-            }, 1000);
+                }, 1000);
+            }
         }
     }, 1000);
 }
@@ -276,8 +266,6 @@ if (restartButton){
     })
 }
 
-window.onload = () => {
-    switchToView(VIEWS.START);
-};
+switchToView(VIEWS.START);
 
 });
