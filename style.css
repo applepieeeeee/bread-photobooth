@@ -210,3 +210,15 @@ body{
 #captureButton:not([style*="pointer-events: none"]):hover{
     opacity: 0.8;
 }
+
+#downloadButton, #restartButton{
+    background-color: #503113;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 4px;
+
+    cursor: pointer;
+    font-size: 16px;
+}
