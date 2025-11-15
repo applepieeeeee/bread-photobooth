@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', () => {
+
 // variables 
 const VIEWS = {
     START: 'view-start',
@@ -8,7 +10,8 @@ const VIEWS = {
 const STATE = {
     capturedImages: [],
     videoStream: null,
-    isCapturing: false
+    isCapturing: false,
+    currentView: VIEWS.START
 }
 
 const CANVAS_SIZE = { width: 620, height: 460 };
@@ -38,9 +41,9 @@ const captureMessage = $('captureMessage');
 
 // for capturing. 
 const tempCanvas = $('tempCanvas');
-const tempC = tempCanvas.getContext('2d');
-
+let tempC = null;
 if (tempCanvas){
+    tempC = tempCanvas.getContext('2d');
     tempCanvas.width = CANVAS_SIZE.width;
     tempCanvas.height = CANVAS_SIZE.height;
 }
@@ -79,6 +82,8 @@ function switchToView(viewName){
     if (target){
         target.style.display = 'flex'
     }
+
+    STATE.currentView = viewName;
 
     if (viewName !== VIEWS.CAPTURE && STATE.videoStream){
         STATE.videoStream.getTracks().forEach(track => track.stop());
@@ -274,3 +279,5 @@ if (restartButton){
 window.onload = () => {
     switchToView(VIEWS.START);
 };
+
+});
