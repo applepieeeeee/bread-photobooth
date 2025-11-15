@@ -24,8 +24,8 @@ body{
 #starSticker{
     position: absolute;
 
-    bottom: 5vh;
-    left: 6vw;
+    bottom: 10vh;
+    left: 26vw;
     width: 10%;
 
     height: auto;
@@ -36,8 +36,8 @@ body{
 #confetti1{
     position: absolute;
 
-    top: 10vh;
-    right: 5vw;
+    top: 25vh;
+    right: 10vw;
     width: 10%;
 
     height: auto;
