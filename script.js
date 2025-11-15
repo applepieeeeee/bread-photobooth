@@ -1,5 +1,3 @@
-const { jsx } = require("react/jsx-runtime");
-
 // variables 
 const VIEWS = {
     START: 'view-start',
@@ -54,19 +52,19 @@ function setCaptureBtnToDisabled(isDisabled){
 
     if(isDisabled){
         captureButton.style.pointerEvents = 'none';
-        captureButton.style.opacity = '0.5';
+        captureButton.style.opacity = '0.7';
     } else{
         captureButton.style.pointerEvents = 'auto';
         captureButton.style.opacity = '1.0';
     }
 }
-function showMessage(msg){
-    if (!captureMessage) return;
-
-    captureMessage.textContent = msg;
-    setTimeout(() =>{
-        captureMessage.textContent = ''; 
-    }, 3000);
+function showMessage(msg, duration = 3000){
+    if (captureMessage){
+        captureMessage.textContent = msg;
+        setTimeout(() =>{
+            captureMessage.textContent = '';
+        }, duration);
+    }
 }
 
 function switchToView(viewName){
