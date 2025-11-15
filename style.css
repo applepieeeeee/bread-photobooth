@@ -57,10 +57,10 @@ body{
     transform: rotate(20deg);
 }
 
-#conf6{
+#star2{
     position: absolute;
-    bottom: 30vh;
-    right: 9vh;
+    bottom: 20vh;
+    right: 18%;
 
     width: 10%;
 }
